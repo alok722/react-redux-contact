@@ -1,7 +1,7 @@
 import React from "react";
 import Avatar from "react-avatar";
 import { Link } from "react-router-dom";
-import { deleteContact } from "../../actions/contactAction";
+import { deleteContact } from "../../store/actions/contactAction";
 import { useDispatch } from "react-redux";
 
 const Contact = ({ contact, selectAll }) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getContact, updateContact } from "../../actions/contactAction";
+import { useSelector, useDispatch } from "react-redux";
+import { updateContact } from "../../store/actions/contactAction";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
@@ -8,35 +8,44 @@ const EditContact = () => {
   let { id } = useParams();
   let history = useHistory();
   const dispatch = useDispatch();
-  const contact = useSelector((state) => state.contact.contact);
+
+
+  const contacts = useSelector((state) => state.contact.contacts);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
+  console.log(id);
+
   useEffect(() => {
-    if (contact != null) {
-      setName(contact.name);
-      setPhone(contact.phone);
-      setEmail(contact.email);
-    }
-    dispatch(getContact(id));
-  }, [contact]);
+    console.log(contacts)
+    const contact = contacts.filter(contact => contact.id === Number(id));
+    console.log(contact);
+    setName(contact[0].name);
+    setPhone(contact[0].phone);
+    setEmail(contact[0].email);
+  }, [contacts]);
+
 
   const onUpdateContact = (e) => {
     e.preventDefault();
 
-    const update_contact = Object.assign(contact, {
-      name: name,
-      phone: phone,
-      email: email,
-    });
+    const update_contact = {
+      id: Number(id),
+      name,
+      phone,
+      email,
+    };
+
+    console.log("update_contact", update_contact);
 
     dispatch(updateContact(update_contact));
     history.push("/");
   };
   return (
     <div className="card border-0 shadow">
-      <div className="card-header">Add a Contact</div>
+      <div className="card-header">Edit Contact</div>
       <div className="card-body">
         <form onSubmit={(e) => onUpdateContact(e)}>
           <div className="form-group">
